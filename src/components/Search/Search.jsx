@@ -4,11 +4,25 @@ const IMAGES = {
   image5: new URL("./img/monster.png", import.meta.url).href,
 };
 
-function Search({ searchTerm, setSearchTerm }) {
+function Search({ searchTerm, setSearchTerm, goods, order }) {
   //setting search term
   function handleSearchTerm(event) {
     let lowerCaseInput = event.target.value.toLowerCase();
     setSearchTerm(lowerCaseInput);
+  }
+
+  function Cart(props) {
+    const { quantity = 0, handleBasketShow = Function.prototype } = props;
+    return (
+      <div className="cart blue darken-4 white-text" onClick={handleBasketShow}>
+        <img
+          src={IMAGES.image4}
+          alt="cart"
+          style={{ width: "50px", height: "50px", marginLeft: "16px" }}
+        />
+        {quantity ? <span className="cart-quantity">{quantity}</span> : null}
+      </div>
+    );
   }
 
   return (
@@ -59,11 +73,12 @@ function Search({ searchTerm, setSearchTerm }) {
       </form>
       <button className="header__card-button">
         {" "}
-        <img
+        {/* <img
           src={IMAGES.image4}
           alt="cart"
           style={{ width: "50px", height: "50px", marginLeft: "16px" }}
-        />
+        /> */}
+        <Cart quantity={order.length} />
         <img
           src={IMAGES.image5}
           alt="pin"

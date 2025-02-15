@@ -14,8 +14,35 @@ const IMAGES = {
 
 function App() {
   const [goods, setGoods] = useState([]);
+  const [order, setOrder] = useState([]);
   const [selectCategory, setSelectCategory] = useState("All");
   const [searchItem, setSearchItem] = useState("");
+  const [alertName, setAlertName] = useState("");
+
+  //сценарий, когда товар добавляется впервый раз
+  const addToBasket = (item) => {
+    //нужна проверка, что увеличивать quantity
+    const itemIndex = order.findIndex((orderItem) => orderItem.id === item.id); //если вдруг айди найдётся, то мы получим индекс этого массива пример => [{id: 1}, {id: 2}]
+    if (itemIndex < 0) {
+      const newItem = { ...item, quantity: 1 };
+      //функция setOrder должна вернуть нам массив и она у нас возвращает список, который уже есть в массиве и добавляет туда новый объект
+      setOrder([...order, newItem]);
+    } else {
+      const newOrder = order.map((orderItem, index) => {
+        if (index === itemIndex) {
+          return {
+            ...orderItem,
+            quantity: orderItem.quantity + 1,
+          };
+        } else {
+          return orderItem;
+        }
+      });
+      setOrder(newOrder);
+    }
+    setAlertName(item.title);
+  };
+
   const fetchData = async () => {
     const response = await fetch(
       "https://fakestoreapi.in/api/products?limit=20"
@@ -72,6 +99,7 @@ function App() {
               searchTerm={searchItem}
               setSearchTerm={setSearchItem}
               onChange={handleSearchItem}
+              order={order}
             />
           </header>
 
@@ -94,15 +122,18 @@ function App() {
               overflow: "auto",
             }}
           >
-            {filteredCharactersToDisplay().map((goods) => (
+            {/* {filteredCharactersToDisplay().map((goods) => (
               <GoodsToDisplay
-                title={goods.title}
-                price={goods.price}
-                category={goods.category}
-                image={goods.image}
+                addToBasket={addToBasket}
+                {...goods}
                 key={goods.id}
               />
-            ))}
+            ))} */}
+            <GoodsToDisplay
+              addToBasket={addToBasket}
+              goods={goods}
+              filteredCharactersToDisplay={filteredCharactersToDisplay}
+            />
           </Box>
         </div>
         <Sidebar />

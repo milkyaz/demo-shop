@@ -13,10 +13,18 @@ const bull = (
 );
 
 export default function GoodsItem(props) {
-  const { id, title, price, description, category, image } = props;
+  const {
+    id,
+    title,
+    price,
+    description,
+    category,
+    image,
+    addToBasket = Function.prototype,
+  } = props;
 
   return (
-    <Box style={{ border: "1px solid black" }} key={id}>
+    <Box style={{ border: "1px solid black" }} id={id}>
       <CardMedia
         sx={{ width: "100%", height: "150px" }}
         component="img"
@@ -58,6 +66,9 @@ export default function GoodsItem(props) {
             Цена: {price} руб.
           </Typography>
         </Box>
+        <button onClick={() => addToBasket({ id, title, price })}>
+          Купить
+        </button>
       </CardContent>
     </Box>
   );
