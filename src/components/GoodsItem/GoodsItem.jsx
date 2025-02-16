@@ -24,7 +24,7 @@ export default function GoodsItem(props) {
   } = props;
 
   return (
-    <Box style={{ border: "1px solid black" }} id={id}>
+    <Box style={{ border: "1px solid black" }}>
       <CardMedia
         sx={{ width: "100%", height: "150px" }}
         component="img"
